@@ -1,0 +1,6 @@
+name: HiddenLorax
+version: 0.1
+description: Automatically plants saplings sitting on grass.
+authors: [JosephCW, Dradraen]
+website: http://www.github.com/josephcw/PluginHiddenLorax
+main: com.github._josephcw.hiddenlorax.HiddenLoraxMain
