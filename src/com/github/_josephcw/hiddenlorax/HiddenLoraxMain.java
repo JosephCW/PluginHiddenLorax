@@ -17,20 +17,26 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class HiddenLoraxMain extends JavaPlugin implements Listener {
 	
+	ConfigLoader cl;
 	LoraxTimer lTimer;
 	List<Entity> serverEntities;
 	
 	@Override
 	public void onEnable() {
+		cl = new ConfigLoader(this);
+		
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		
 		serverEntities = new ArrayList<>();
-		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-			@Override
-			public void run() {
-				runLoraxTimer();
-			}
-		}, 0L, (10L * 20L));
+		
+		if(cl.isEnabled) {
+			Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+				@Override
+				public void run() {
+					runLoraxTimer();
+				}
+			}, 0L, (10L * 20L));
+		}
 	}
 
 	private void runLoraxTimer() {
