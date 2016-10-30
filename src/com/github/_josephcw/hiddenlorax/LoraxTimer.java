@@ -17,53 +17,98 @@ public class LoraxTimer extends BukkitRunnable {
 	List<Entity> serverEntities = new ArrayList<>();
 	HashMap<Entity, Byte> entityBytes = new HashMap<>();
 	
+	private Item sItem;
+	private ItemStack sIStack;
+	
 	public LoraxTimer(HiddenLoraxMain hiddenLoraxMain) {
 		this.plugin = hiddenLoraxMain;
 	}
 
 	@Override
 	public void run() {
-		if (!serverEntities.isEmpty()) {
-			for (Entity sEntity:serverEntities) {
-				if (sEntity instanceof Item) {
-					Item sItem = (Item) sEntity; 
-					ItemStack sIStack = sItem.getItemStack();
-					if (sIStack.getData().getItemType().equals(Material.SAPLING)) {
-						Block sIStackBlockBeneath = sEntity.getLocation().subtract(0, 1, 0).getBlock();
+		if (doEntitiesExist(serverEntities)) {
+			
+			for (Entity sEntity : serverEntities) {
+				
+				if (assignAsItem(sEntity)) {
+					
+					if (itemIsSapling(sItem)) {
+						
+						Block blockBeneath = getBlockBeneath(sEntity);
+						
+						if (allowedSurface(blockBeneath)) {
 							
-						if (sIStackBlockBeneath.getType().equals(Material.GRASS) 
-								|| sIStackBlockBeneath.getType().equals(Material.DIRT)) {
-							switch(sItem.getName()) {
-	   							case "item.tile.sapling.spruce":
-	   								entityBytes.put(sEntity, (byte) 1);
-	   								break;
-	   							case "item.tile.sapling.birch":
-	   								entityBytes.put(sEntity, (byte) 2);
-	   								break;
-	   							case "item.tile.sapling.jungle":
-	   								entityBytes.put(sEntity, (byte) 3);
-	   								break;
-	   							case "item.tile.sapling.acacia":
-	   								entityBytes.put(sEntity, (byte) 4);
-	   								break;
-	   							case "item.tile.sapling.big_oak":
-	   								entityBytes.put(sEntity, (byte) 5);
-	   								break;
-	   							default:
-	   								entityBytes.put(sEntity, (byte) 0);
-							}
+							entityBytes.put(sEntity, getTreeByteFromName(sItem));
+							
 						}
 						
 					}
+					
 				}
+				
 			}
+			// inside of do entities exist.
+			
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 				@Override
 				public void run() {
 					plugin.plantTrees(entityBytes);
 				}
 			}, 20L);
+
+			
 		}
+		
+			
+	}
+
+	private Byte getTreeByteFromName(Item sItem2) {
+		switch(sItem2.getName().substring(18)) {
+		case "item.tile.sapling.spruce":
+			return (byte) 1;
+		case "item.tile.sapling.birch":
+			return (byte) 2;
+		case "item.tile.sapling.jungle":
+			return (byte) 3;
+		case "item.tile.sapling.acacia":
+			return (byte) 4;
+		case "item.tile.sapling.big_oak":
+			return (byte) 5;
+		default:
+			return (byte) 0;
+		}
+	}
+
+	private boolean allowedSurface(Block blockBeneath) {
+		if (blockBeneath.getType().equals(Material.GRASS) ||
+				blockBeneath.getType().equals(Material.DIRT)) { 
+			return true;
+		}
+		return false;
+	}
+
+	private Block getBlockBeneath(Entity sEntity) {
+		return sEntity.getLocation().subtract(0, 1, 0).getBlock();
+	}
+
+	private boolean itemIsSapling(Item sItem2) {
+		if (sItem2.getType().equals(Material.SAPLING)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean assignAsItem(Entity sEntity) {
+		if (sEntity instanceof Item) {
+			this.sItem = (Item) sEntity;
+			this.sIStack = this.sItem.getItemStack();
+			return true;
+		}
+		return false;
+	}
+
+	private boolean doEntitiesExist(List<Entity> serverEntities2) {
+		return serverEntities2.isEmpty();
 	}
 
 	public void updateEntityList(List<Entity> serverEntities) {
