@@ -10,12 +10,20 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github._josephcw.hiddenlorax.configmanager.SimpleConfig;
+import com.github._josephcw.hiddenlorax.configmanager.SimpleConfigManager;
+
 
 public class HiddenLoraxMain extends JavaPlugin implements Listener {
+	
+	SimpleConfigManager manager = new SimpleConfigManager(this);
+	SimpleConfig loraxConfig;
 	
 	ConfigLoader cl;
 	LoraxTimer lTimer;
@@ -23,6 +31,16 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
+		
+		manager = new SimpleConfigManager(this);
+		loraxConfig = manager.getNewConfig("loraxConfig.yml", new String[] {
+				"Hidden Lorax Auto Planter Config"
+		});
+		
+		String isEnabled =  String.valueOf(loraxConfig.get("enabled")) + " file";
+		Bukkit.broadcastMessage(isEnabled);
+		
+		
 		cl = new ConfigLoader(this);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
@@ -65,5 +83,15 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 				me.getKey().remove();
 			}
 		}
+	}	
+	
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+		
+		loraxConfig.set("enabled", true);
+		loraxConfig.saveConfig();
+		
+		boolean isEnabled = loraxConfig.getBoolean("enabled");
+		sender.sendMessage(String.valueOf(isEnabled));
+		return true;
 	}
 }

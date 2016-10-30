@@ -4,3 +4,9 @@ description: Automatically plants saplings sitting on grass.
 authors: [JosephCW, Dradraen]
 website: http://www.github.com/josephcw/PluginHiddenLorax
 main: com.github._josephcw.hiddenlorax.HiddenLoraxMain
+
+commands:
+  loraxenable:
+    description: Enable Lorax
+    aliases: [lorax]
+    usage: /<command>
