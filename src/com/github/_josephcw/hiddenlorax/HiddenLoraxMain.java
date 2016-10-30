@@ -37,23 +37,30 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 				"Hidden Lorax Auto Planter Config"
 		});
 		
-		String isEnabled =  String.valueOf(loraxConfig.get("enabled")) + " file";
-		Bukkit.broadcastMessage(isEnabled);
+		loadConfigDefautlsIfNotPresent();
 		
-		
-		cl = new ConfigLoader(this);
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		
 		serverEntities = new ArrayList<>();
 		
-		if(cl.isEnabled) {
+		if(loraxConfig.getBoolean("enabled")) {
 			Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 				@Override
 				public void run() {
 					runLoraxTimer();
 				}
-			}, 0L, cl.getDelayTimer());
+			}, 0L, Long.valueOf(loraxConfig.getString("delay")));
+		}
+	}
+
+	private void loadConfigDefautlsIfNotPresent() {
+		Set<String> loraxKeys = loraxConfig.getKeys();
+		if (!loraxKeys.contains("enabled")) {
+			loraxConfig.set("enabled", true);
+		}
+		if (!loraxKeys.contains("delay")) {
+			loraxConfig.set("delay", 10L);
 		}
 	}
 
@@ -87,11 +94,13 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		
+		loraxConfig.set("delay", 10L);
 		loraxConfig.set("enabled", true);
 		loraxConfig.saveConfig();
-		
+
 		boolean isEnabled = loraxConfig.getBoolean("enabled");
-		sender.sendMessage(String.valueOf(isEnabled));
+		sender.sendMessage("enabled: " + String.valueOf(isEnabled));
+		sender.sendMessage("delay: " + String.valueOf(loraxConfig.get("delay")));
 		return true;
 	}
 }
