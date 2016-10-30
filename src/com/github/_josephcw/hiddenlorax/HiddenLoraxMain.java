@@ -35,7 +35,7 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 				public void run() {
 					runLoraxTimer();
 				}
-			}, 0L, (10L * 20L));
+			}, 0L, cl.getDelayTimer());
 		}
 	}
 
