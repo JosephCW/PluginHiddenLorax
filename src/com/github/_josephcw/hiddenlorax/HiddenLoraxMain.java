@@ -1,81 +1,64 @@
 package com.github._josephcw.hiddenlorax;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 
 public class HiddenLoraxMain extends JavaPlugin implements Listener {
+	
+	LoraxTimer lTimer;
+	List<Entity> serverEntities;
 	
 	@Override
 	public void onEnable() {
 		Bukkit.getServer().getPluginManager().registerEvents(this, this);
 		
-		BukkitScheduler scheduler = getServer().getScheduler();
-		scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
-            @SuppressWarnings("deprecation")
+		serverEntities = new ArrayList<>();
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 			@Override
-            public void run() {
-            	// Check for all entities on the server
-               	for (Entity serverEntity:Bukkit.getServer().getWorld("world").getEntities()) {
-               		// If it is an item on the ground
-               		if (serverEntity instanceof Item) {
-               			Item groundItem = (Item) serverEntity;
-               			ItemStack oStack = groundItem.getItemStack();
-               			// If it is a sapling.
-               			if (oStack.getData().getItemType().equals(Material.SAPLING)) {
+			public void run() {
+				runLoraxTimer();
+			}
+		}, 0L, (10L * 20L));
+	}
 
-               				//Have sapling, check if block below is grass.
-               				Block iStackBlock = serverEntity.getLocation().getBlock();
-               				Block blockBeneath = serverEntity.getLocation().subtract(new Location(serverEntity.getWorld(), 0, 1, 0)).getBlock();
-               				if (blockBeneath.getType().equals(Material.GRASS)) {
-               					iStackBlock.setType(Material.SAPLING);
-               					//iStackBlock.setData((byte) 1);
-               					
-               					// Set block state type based off of item dropped name
-               					switch(groundItem.getName()) {
-               						case "item.tile.sapling.spruce":
-               							iStackBlock.setData((byte) 1);
-               							break;
-               						case "item.tile.sapling.birch":
-               							iStackBlock.setData((byte) 2);
-               							break;
-               						case "item.tile.sapling.jungle":
-               							iStackBlock.setData((byte) 3);
-               							break;
-               						case "item.tile.sapling.acacia":
-               							iStackBlock.setData((byte) 4);
-               							break;
-               						case "item.tile.sapling.big_oak":
-               							iStackBlock.setData((byte) 5);
-               							break;
-               						default:
-               							iStackBlock.setData((byte) 0);
-               					}
-               					//MaterialData state = iStackBlock.getState().getData();
-               					// If the materialdata for the block is a sapling
-               					//if (state instanceof Sapling) {
-               					//Case Switch depending on oStack damage
-               					//Sapling s = (Sapling) state;
-               					//Bukkit.broadcastMessage(groundItem.getName());
-               						
-               					//s.setSpecies(TreeSpecies.BIRCH);
-               					serverEntity.remove();
-               					//}
-               					//new Sapling(Material.SAPLING, TreeSpecies.ACACIA)
-               					//iStackBlock.setMetadata("type", "oak");
-               				}
-               			}
-               		}
-               	}
-            }
-        }, 0L, (10L * 20L));
+	private void runLoraxTimer() {
+		if (!serverEntities.isEmpty())
+			serverEntities.clear();
+		
+		Bukkit.broadcastMessage("runLoraxTimer");
+		for (Entity sEntity:Bukkit.getWorlds().get(0).getEntities())
+			serverEntities.add(sEntity);
+		
+		lTimer = new LoraxTimer(this);
+		lTimer.updateEntityList(serverEntities);
+		lTimer.runTaskAsynchronously(this);
+	}
+
+	@SuppressWarnings("deprecation")
+	public void plantTrees(HashMap<Entity, Byte> myMap) {
+		if (!myMap.isEmpty()) {
+			Set<Entry<Entity, Byte>> set = myMap.entrySet();
+			Iterator<Entry<Entity, Byte>> iterator = set.iterator();
+			
+			while(iterator.hasNext()) {
+				Entry<Entity, Byte> me = iterator.next();
+				Block blockToSapling = me.getKey().getLocation().getBlock();
+				blockToSapling.setType(Material.SAPLING);
+				blockToSapling.setData(me.getValue());
+				me.getKey().remove();
+			}
+		}
 	}
 }
