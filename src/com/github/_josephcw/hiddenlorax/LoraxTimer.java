@@ -47,16 +47,13 @@ public class LoraxTimer extends BukkitRunnable {
 				}
 				
 			}
-			// inside of do entities exist.
+			/*
+			 *  only if there are entities, then run the plant trees method.
+			 *  lambda to replace anonymous runnable inner class
+			 */
 			
-			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-				@Override
-				public void run() {
-					plugin.plantTrees(entityBytes);
-				}
-			}, 20L);
-
-			
+			Runnable r = () -> { plugin.plantTrees(entityBytes); };
+			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, r, 20L);
 		}
 		
 			
