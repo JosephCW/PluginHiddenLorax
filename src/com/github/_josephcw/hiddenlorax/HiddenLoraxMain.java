@@ -36,8 +36,7 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 	private void runLoraxTimer() {
 		if (!serverEntities.isEmpty())
 			serverEntities.clear();
-		
-		Bukkit.broadcastMessage("runLoraxTimer");
+
 		for (Entity sEntity:Bukkit.getWorlds().get(0).getEntities())
 			serverEntities.add(sEntity);
 		
