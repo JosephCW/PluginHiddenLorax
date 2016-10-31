@@ -10,3 +10,12 @@ commands:
     description: Enable Lorax
     aliases: [lorax, hl]
     usage: /<command>
+    permissions: hiddenlorax.settings
+
+permissions:
+  hiddenlorax.*:
+    default: op
+    description: All HiddenLorax permissions
+    children: hiddenlorax.settings
+  hiddenlorax.settings:
+    description: settings for HiddenLoraxPlugin
