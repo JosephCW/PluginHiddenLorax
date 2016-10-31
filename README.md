@@ -10,5 +10,5 @@ hiddenlorax.* - access to all HiddenLorax commands. Default is op.
 hiddenlorax.settings - access to HiddenLorax settings - currently is all permissions.  
 
 **Commands:**  
-/hiddenlorax <on/off/status> aliases: [lorax, hl]  
-/hiddenlorax delay <seconds> - Sets the time in seconds between between checking for saplings
+/hiddenlorax \<on/off/status> aliases: [lorax, hl]  
+/hiddenlorax delay \<seconds> - Sets the time in seconds between between checking for saplings
