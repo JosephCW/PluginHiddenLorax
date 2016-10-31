@@ -1,7 +1,6 @@
 package com.github._josephcw.hiddenlorax.configmanager;
 
 import java.io.BufferedReader; 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -104,7 +103,7 @@ public class SimpleConfigManager {
                 this.copyResource(plugin.getResource(resource), file);
             }
  
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

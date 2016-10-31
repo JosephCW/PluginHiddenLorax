@@ -6,7 +6,7 @@ website: http://www.github.com/josephcw/PluginHiddenLorax
 main: com.github._josephcw.hiddenlorax.HiddenLoraxMain
 
 commands:
-  loraxenable:
+  hiddenlorax:
     description: Enable Lorax
-    aliases: [lorax]
+    aliases: [lorax, hl]
     usage: /<command>

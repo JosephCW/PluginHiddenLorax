@@ -17,7 +17,8 @@ public class SimpleConfig {
     private File file;
     private FileConfiguration config;
  
-    public SimpleConfig(InputStream configStream, File configFile, int comments, JavaPlugin plugin) {
+    @SuppressWarnings("deprecation")
+	public SimpleConfig(InputStream configStream, File configFile, int comments, JavaPlugin plugin) {
         this.comments = comments;
         this.manager = new SimpleConfigManager(plugin);
  
@@ -117,7 +118,8 @@ public class SimpleConfig {
         this.reloadConfig();
     }
  
-    public void reloadConfig() {
+    @SuppressWarnings("deprecation")
+	public void reloadConfig() {
         this.config = YamlConfiguration.loadConfiguration(manager.getConfigContent(file));
     }
  
