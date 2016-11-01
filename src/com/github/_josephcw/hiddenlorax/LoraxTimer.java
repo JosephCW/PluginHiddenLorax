@@ -34,7 +34,9 @@ public class LoraxTimer extends BukkitRunnable {
 					if (itemStackIsSapling(sItemStack)) {
 						Block blockBeneath = getBlockBeneath(sEntity);
 						if (allowedSurface(blockBeneath)) {
-							entityBytes.put(sEntity, getTreeByteFromName(sItem));
+							if (currentBlockAllowed(sEntity)) {
+								entityBytes.put(sEntity, getTreeByteFromName(sItem));
+							}
 						}
 					}
 				}
@@ -47,6 +49,10 @@ public class LoraxTimer extends BukkitRunnable {
 				};
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, r, 20L);
 		}
+	}
+
+	private boolean currentBlockAllowed(Entity sEntity) {
+		return sEntity.getLocation().getBlock().getType().equals(Material.AIR);
 	}
 
 	private Byte getTreeByteFromName(Item treeSapling) {
