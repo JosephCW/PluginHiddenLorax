@@ -2,7 +2,10 @@ package com.github._josephcw.hiddenlorax;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -44,12 +47,39 @@ public class LoraxTimer extends BukkitRunnable {
 			// only if there are entities, then run the plant trees method.
 			// lambda to replace runnable anonymous inner class
 			Runnable r = () -> { 
-				plugin.plantTrees(entityBytes); 
+				plantTrees(entityBytes); 
 				
 				};
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, r, 20L);
 		}
 	}
+	
+
+	@SuppressWarnings("deprecation")
+	public void plantTrees(HashMap<Entity, Byte> myMap) {
+		if (!myMap.isEmpty()) {
+			Set<Entry<Entity, Byte>> set = myMap.entrySet();
+			Iterator<Entry<Entity, Byte>> iterator = set.iterator();
+			
+			while(iterator.hasNext()) {
+				Entry<Entity, Byte> me = iterator.next();
+				Block blockToSapling = me.getKey().getLocation().getBlock();
+				
+				/*
+				 * We need to check to see if the block is still valid now
+				 * that we are on a syncronus task with the server.
+				 */
+				if (currentBlockAllowed(me.getKey())) {
+					// We also need to check that the block beneath is still allowed.
+					if (allowedSurface(getBlockBeneath(me.getKey()))) { 
+						blockToSapling.setType(Material.SAPLING);
+						blockToSapling.setData(me.getValue());
+					}
+				}
+				me.getKey().remove();
+			}
+		}
+	}	
 
 	private boolean currentBlockAllowed(Entity sEntity) {
 		return sEntity.getLocation().getBlock().getType().equals(Material.AIR);

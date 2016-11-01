@@ -16,6 +16,7 @@ permissions:
   hiddenlorax.*:
     default: op
     description: All HiddenLorax permissions
-    children: hiddenlorax.settings
+    children:
+      hiddenlorax.settings: true
   hiddenlorax.settings:
     description: settings for HiddenLoraxPlugin
