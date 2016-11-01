@@ -1,6 +1,7 @@
 # PluginHiddenLorax  
   
-Soon to be found on dev.bukkit.org  
+Now found on dev.bukkit.org!
+https://dev.bukkit.org/bukkit-plugins/hidden-lorax/
 
 **Description:**
 This plugin will automatically plant saplings that are sitting on a grass or dirt block after a configurable amount of time.
