@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.github._josephcw.hiddenlorax.listeners.SaplingDroppedEvent;
 
 
-public class HiddenLoraxMain extends JavaPlugin implements Listener {
+public class HiddenLoraxMain extends JavaPlugin {
 	
 	BukkitTask taskID;
 	
@@ -47,25 +47,24 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 
 	private void registerCommands() {
 		getCommand("hiddenlorax").setExecutor(new LoraxCommand());
-		
 	}
 
 	private void handleConfig() {
 		this.saveDefaultConfig();
 	}
 
-	private void launchTask() {
-		taskID = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
-			@Override
-			public void run() {
-				if(loraxConfig.getBoolean("enabled")) {
-					runLoraxTimer();
-				} else {
-					taskID.cancel();
-				}
-			}
-		}, 0L, Long.valueOf(loraxConfig.getString("delay")) * 20);
-	}
+//	private void launchTask() {
+//		taskID = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+//			@Override
+//			public void run() {
+//				if(loraxConfig.getBoolean("enabled")) {
+//					runLoraxTimer();
+//				} else {
+//					taskID.cancel();
+//				}
+//			}
+//		}, 0L, Long.valueOf(loraxConfig.getString("delay")) * 20);
+//	}
 
 	private void runLoraxTimer() {
 		if (!serverEntities.isEmpty())
