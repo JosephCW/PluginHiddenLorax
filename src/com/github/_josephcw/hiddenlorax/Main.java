@@ -14,7 +14,7 @@ import com.github._josephcw.hiddenlorax.listeners.SaplingDroppedEvent;
 
 public class Main extends JavaPlugin {
 	// Settings
-	public boolean isEnabled;
+	private static boolean isEnabled;
 	public Long tickWaitTimerDelay;
 	
 	
@@ -22,22 +22,32 @@ public class Main extends JavaPlugin {
 	LoraxTimer lTimer;
 	List<Entity> serverEntities;
 	
-	private Listener[] listeners = {
-			new SaplingDroppedEvent()
+	private Listener[] eventListeners = {
+			new SaplingDroppedEvent(this)
 	};
+	
 	
 	@Override
 	public void onEnable() {
-		handleConfig();
+		
+		isEnabled = this.getConfig().getBoolean("enabled");
+		tickWaitTimerDelay = this.getConfig().getLong("delay");
+		this.saveDefaultConfig();
+		
+		
 		registerCommands();
 		registerListeners();
 		
 		//launchTask();
 	}
+	
+	public static boolean getPluginStatus() {
+		return isEnabled;
+	}
 
 	private void registerListeners() {
 		PluginManager pm = Bukkit.getPluginManager();
-		for (Listener l : listeners) {
+		for (Listener l : eventListeners) {
 			pm.registerEvents(l, this);
 		}
 	}
@@ -47,12 +57,22 @@ public class Main extends JavaPlugin {
 	}
 
 	private void handleConfig() {
+		// Save the default config if not present.
 		this.saveDefaultConfig();
+		// Set all of our variables necessary to that found in the config.
+		Bukkit.broadcastMessage(String.valueOf(this.getConfig().getBoolean("enabled")));
 		
-		isEnabled = this.getConfig().getBoolean("enabled");
-		tickWaitTimerDelay = this.getConfig().getLong("delay");
+	}
+	
+	// TODO Move this into our LoraxCommand / Config Class
+	private void reloadConfigSettingsFromFile() {
+		// reload the config, then reassign our variables
+		this.reloadConfig();
+		
+		handleConfig();
 	}
 
+	
 //	private void launchTask() {
 //		taskID = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 //			@Override
