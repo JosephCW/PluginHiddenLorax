@@ -11,8 +11,7 @@ public class LoraxCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if (sender instanceof Player) {
 			Player p = (Player) sender;
-			
-			
+			p.sendMessage("Using Command");
 		} else {
 			sender.sendMessage("Please change settings through the config, then use the /lorax reload command.");
 		}

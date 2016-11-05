@@ -16,14 +16,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class LoraxTimer extends BukkitRunnable {
 	
-	HiddenLoraxMain plugin;
+	Main plugin;
 	List<Entity> serverEntities = new ArrayList<>();
 	HashMap<Entity, Byte> entityBytes = new HashMap<>();
 	
 	private Item sItem;
 	private ItemStack sItemStack;
 	
-	public LoraxTimer(HiddenLoraxMain hiddenLoraxMain) {
+	public LoraxTimer(Main hiddenLoraxMain) {
 		this.plugin = hiddenLoraxMain;
 	}
 

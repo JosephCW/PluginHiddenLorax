@@ -1,14 +1,8 @@
 package com.github._josephcw.hiddenlorax;
 
-import java.util.ArrayList;
-
 import java.util.List;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -18,10 +12,13 @@ import org.bukkit.scheduler.BukkitTask;
 import com.github._josephcw.hiddenlorax.listeners.SaplingDroppedEvent;
 
 
-public class HiddenLoraxMain extends JavaPlugin {
+public class Main extends JavaPlugin {
+	// Settings
+	public boolean isEnabled;
+	public Long tickWaitTimerDelay;
+	
 	
 	BukkitTask taskID;
-	
 	LoraxTimer lTimer;
 	List<Entity> serverEntities;
 	
@@ -51,6 +48,9 @@ public class HiddenLoraxMain extends JavaPlugin {
 
 	private void handleConfig() {
 		this.saveDefaultConfig();
+		
+		isEnabled = this.getConfig().getBoolean("enabled");
+		tickWaitTimerDelay = this.getConfig().getLong("delay");
 	}
 
 //	private void launchTask() {
