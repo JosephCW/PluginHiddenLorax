@@ -1,7 +1,6 @@
 package com.github._josephcw.hiddenlorax.configmanager;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
  
@@ -17,13 +16,12 @@ public class SimpleConfig {
     private File file;
     private FileConfiguration config;
  
-    @SuppressWarnings("deprecation")
-	public SimpleConfig(InputStream configStream, File configFile, int comments, JavaPlugin plugin) {
+	public SimpleConfig(File configFile, int comments, JavaPlugin plugin) {
         this.comments = comments;
         this.manager = new SimpleConfigManager(plugin);
  
         this.file = configFile;
-        this.config = YamlConfiguration.loadConfiguration(configStream);
+        this.config = YamlConfiguration.loadConfiguration(configFile);
     }
  
     public Object get(String path) {
@@ -118,7 +116,6 @@ public class SimpleConfig {
         this.reloadConfig();
     }
  
-    @SuppressWarnings("deprecation")
 	public void reloadConfig() {
         this.config = YamlConfiguration.loadConfiguration(manager.getConfigContent(file));
     }

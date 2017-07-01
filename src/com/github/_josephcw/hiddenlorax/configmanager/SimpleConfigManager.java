@@ -2,7 +2,6 @@ package com.github._josephcw.hiddenlorax.configmanager;
 
 import java.io.BufferedReader; 
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -10,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
  
 import org.bukkit.plugin.java.JavaPlugin;
  
@@ -43,7 +41,7 @@ public class SimpleConfigManager {
  
         }
  
-        SimpleConfig config = new SimpleConfig(this.getConfigContent(filePath), file, this.getCommentsNum(file), plugin);
+        SimpleConfig config = new SimpleConfig(file, this.getCommentsNum(file), plugin);
         return config;
  
     }
@@ -99,7 +97,7 @@ public class SimpleConfigManager {
             file.getParentFile().mkdirs();
             file.createNewFile();
  
-            if(!resource.isEmpty() && resource != null) {
+            if(resource != null && !resource.isEmpty()) {
                 this.copyResource(plugin.getResource(resource), file);
             }
  
@@ -179,45 +177,13 @@ public class SimpleConfigManager {
     * @param filePath - Path to file
     * @return - File as Input Stream
     */
-    public InputStream getConfigContent(File file) {
+    public File getConfigContent(File file) {
  
         if(!file.exists()) {
             return null;
         }
  
-        try {
-            int commentNum = 0;
- 
-            String addLine;
-            String currentLine;
-            String pluginName = this.getPluginName();
- 
-            StringBuilder whole = new StringBuilder("");
-            BufferedReader reader = new BufferedReader(new FileReader(file));
- 
-            while((currentLine = reader.readLine()) != null) {
- 
-                if(currentLine.startsWith("#")) {
-                    addLine = currentLine.replaceFirst("#", pluginName + "_COMMENT_" + commentNum + ":");
-                    whole.append(addLine + "\n");
-                    commentNum++;
- 
-                } else {
-                    whole.append(currentLine + "\n");
-                }
- 
-            }
- 
-            String config = whole.toString();
-            InputStream configStream = new ByteArrayInputStream(config.getBytes(Charset.forName("UTF-8")));
- 
-            reader.close();
-            return configStream;
- 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return file;
     }
  
     /*
@@ -258,8 +224,8 @@ public class SimpleConfigManager {
     * @param filePath - Path to file
     * @return - readied file
     */
-    public InputStream getConfigContent(String filePath) {
-        return this.getConfigContent(this.getConfigFile(filePath));
+    public File getConfigContent(String filePath) {
+        return new File(filePath);
     }
  
     private String prepareConfigString(String configString) {
