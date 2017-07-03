@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -76,8 +77,11 @@ public class HiddenLoraxMain extends JavaPlugin implements Listener {
 		if (!serverEntities.isEmpty())
 			serverEntities.clear();
 
-		for (Entity sEntity:Bukkit.getWorlds().get(0).getEntities())
-			serverEntities.add(sEntity);
+		for (World world : Bukkit.getWorlds()) {
+			for (Entity entity : world.getEntities()) {
+				serverEntities.add(entity);
+			}
+		}
 		
 		lTimer = new LoraxTimer(this);
 		lTimer.updateEntityList(serverEntities);
